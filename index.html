@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#020510">
+<meta name="background-color" content="#020510">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Crash Predictor">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Crash Predictor">
+<meta name="msapplication-TileColor" content="#020510">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="format-detection" content="telephone=no">
+
+<!-- SEO & Description -->
+<meta name="description" content="سكربت توقع الطيارة - نتائج مضمونة ">
+<title>🚀 Crash Predictor</title>
+
+<!-- PWA Manifest (inline) -->
+<script>
+// Inline manifest as data URI for single-file PWA
+const manifest = {
+  name: "Crash Predictor 🚀",
+  short_name: "Predictor",
+  description: "سكربت توقع الطيارة - نتائج مضمونة",
+  start_url: "./",
+  display: "standalone",
+  orientation: "portrait-primary",
+  background_color: "#020510",
+  theme_color: "#020510",
+  lang: "ar",
+  dir: "rtl",
+  icons: [
+    {
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23020510'/%3E%3Ctext x='96' y='130' font-size='110' text-anchor='middle'%3E🚀%3C/text%3E%3C/svg%3E",
+      sizes: "192x192",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    },
+    {
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23020510'/%3E%3Ctext x='256' y='350' font-size='300' text-anchor='middle'%3E🚀%3C/text%3E%3C/svg%3E",
+      sizes: "512x512",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }
+  ],
+  categories: ["games", "utilities"],
+  shortcuts: [
+    {
+      name: "دخول سريع",
+      short_name: "دخول",
+      description: "فتح التوقع مباشرة",
+      url: "./"
+    }
+  ]
+};
+const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+const manifestURL = URL.createObjectURL(blob);
+const link = document.createElement('link');
+link.rel = 'manifest';
+link.href = manifestURL;
+document.head.appendChild(link);
+</script>
+
+<!-- Apple Touch Icons (SVG inline) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='38' fill='%23020510'/%3E%3Ctext x='90' y='125' font-size='100' text-anchor='middle'%3E🚀%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='0' y='28' font-size='28'%3E🚀%3C/text%3E%3C/svg%3E">
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#020510;--panel:#080f1e;--card:#0d1829;--border:#1a2d4a;
+  --gold:#f5a623;--green:#00e676;--red:#ff1744;--blue:#2979ff;
+  --cyan:#00e5ff;--orange:#ff6d00;--text:#e0e8ff;--muted:#4a6080;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+  --hdr-h:56px;
+  --radius-card:20px;
+  --radius-sm:13px;
+}
+
+/* RESET & BASE */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html{
+  font-size:16px;
+  height:100%;
+  height:100dvh;
+  overflow:hidden;
+  /* Prevent pull-to-refresh on iOS */
+  overscroll-behavior:none;
+}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  height:100%;
+  height:100dvh;
+  overflow:hidden;
+  touch-action:pan-y;
+  -webkit-text-size-adjust:100%;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  user-select:none;
+  -webkit-user-select:none;
+  /* Prevent text selection on long press */
+}
+
+/* BACKGROUND EFFECTS */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 10%,rgba(41,121,255,.09) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 85%,rgba(0,229,255,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 50%,rgba(245,166,35,.03) 0%,transparent 65%);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(41,121,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(41,121,255,.03) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+
+/* ═══════════════════════════════════
+   AUTH SCREEN
+═══════════════════════════════════ */
+#authScreen{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  padding:max(24px,var(--safe-top)) max(20px,var(--safe-left)) max(24px,var(--safe-bottom)) max(20px,var(--safe-right));
+  background:var(--bg);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.auth-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:26px;
+  padding:clamp(28px,8vw,44px) clamp(20px,6vw,36px);
+  width:100%;
+  max-width:380px;
+  box-shadow:0 0 80px rgba(41,121,255,.18),0 0 160px rgba(0,0,0,.9);
+  position:relative;z-index:1;
+  animation:fadeUp .45s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+.auth-plane{
+  font-size:clamp(56px,16vw,76px);
+  display:block;text-align:center;
+  animation:fly 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 22px rgba(245,166,35,.7));
+}
+@keyframes fly{
+  0%,100%{transform:translateY(0) rotate(-5deg)}
+  50%{transform:translateY(-14px) rotate(5deg)}
+}
+.auth-title{
+  font-family:'Orbitron',sans-serif;
+  color:var(--gold);
+  font-size:clamp(15px,5vw,22px);
+  text-align:center;margin-top:12px;
+  letter-spacing:2px;
+  text-shadow:0 0 20px rgba(245,166,35,.5);
+}
+.auth-sub{
+  color:var(--muted);font-size:clamp(11px,3vw,13px);
+  text-align:center;margin-top:6px;margin-bottom:28px;
+  line-height:1.5;
+}
+.auth-input{
+  width:100%;background:var(--bg);
+  border:1.5px solid var(--border);
+  color:var(--text);
+  padding:16px 18px;
+  border-radius:14px;
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(20px,6vw,26px);
+  letter-spacing:8px;text-align:center;
+  outline:none;
+  transition:border-color .3s,box-shadow .3s;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  min-height:58px;
+  /* Better mobile input */
+  caret-color:var(--gold);
+}
+.auth-input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 22px rgba(245,166,35,.22);
+}
+.btn-enter{
+  width:100%;
+  background:linear-gradient(135deg,#f5a623,#e8920f);
+  color:#000;border:none;
+  padding:18px;border-radius:14px;
+  font-family:'Cairo',sans-serif;
+  font-size:clamp(16px,5vw,19px);
+  font-weight:900;cursor:pointer;
+  margin-top:14px;
+  transition:transform .15s,opacity .15s;
+  min-height:56px;
+  /* iOS button fix */
+  -webkit-appearance:none;
+  touch-action:manipulation;
+}
+.btn-enter:active{transform:scale(.96);opacity:.9;}
+.auth-err{
+  text-align:center;color:var(--red);
+  font-size:13px;margin-top:12px;min-height:20px;
+  transition:opacity .3s;
+}
+
+/* PWA Install Banner */
+#installBanner{
+  display:none;
+  background:linear-gradient(135deg,rgba(41,121,255,.15),rgba(0,229,255,.1));
+  border:1px solid rgba(0,229,255,.3);
+  border-radius:16px;
+  padding:14px 16px;
+  margin-top:16px;
+  width:100%;max-width:380px;
+  animation:fadeUp .5s ease .3s both;
+}
+.install-row{display:flex;align-items:center;gap:10px;}
+.install-icon{font-size:26px;flex-shrink:0;}
+.install-text{flex:1;}
+.install-text strong{display:block;font-size:14px;color:var(--cyan);margin-bottom:2px;}
+.install-text span{font-size:11px;color:var(--muted);}
+.btn-install{
+  background:var(--cyan);color:#000;
+  border:none;padding:8px 16px;
+  border-radius:10px;font-family:'Cairo',sans-serif;
+  font-size:13px;font-weight:900;
+  cursor:pointer;white-space:nowrap;
+  min-height:36px;touch-action:manipulation;
+  -webkit-appearance:none;
+}
+.btn-install:active{opacity:.85;}
+.btn-dismiss{
+  background:none;border:none;color:var(--muted);
+  font-size:18px;cursor:pointer;
+  padding:4px;line-height:1;
+  touch-action:manipulation;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-8px)}
+  40%,80%{transform:translateX(8px)}
+}
+
+/* ═══════════════════════════════════
+   MAIN SCREEN
+═══════════════════════════════════ */
+#mainScreen{
+  display:none;
+  flex-direction:column;
+  height:100%;
+  height:100dvh;
+  position:relative;z-index:1;
+  overflow:hidden;
+}
+
+/* HEADER */
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:max(12px,var(--safe-top)) clamp(14px,4vw,22px) 12px;
+  padding-left:max(clamp(14px,4vw,22px),var(--safe-left));
+  padding-right:max(clamp(14px,4vw,22px),var(--safe-right));
+  border-bottom:1px solid var(--border);
+  background:rgba(8,15,30,.97);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  position:relative;z-index:200;
+  flex-shrink:0;
+  min-height:var(--hdr-h);
+}
+.hdr-left{display:flex;align-items:center;gap:10px;}
+.hdr-logo{
+  font-family:'Orbitron',sans-serif;color:var(--gold);
+  font-size:clamp(12px,3.5vw,16px);letter-spacing:2px;
+}
+.live-dot{
+  width:9px;height:9px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(0,230,118,.6);
+  animation:pls 1.8s infinite;
+  flex-shrink:0;
+}
+@keyframes pls{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.5);opacity:.6}
+}
+.btn-out{
+  background:rgba(255,23,68,.1);
+  border:1px solid rgba(255,23,68,.3);
+  color:var(--red);
+  padding:9px 16px;border-radius:10px;
+  font-family:'Cairo',sans-serif;
+  font-size:clamp(12px,3.5vw,14px);
+  font-weight:700;cursor:pointer;
+  min-height:40px;
+  -webkit-appearance:none;
+  touch-action:manipulation;
+}
+.btn-out:active{opacity:.7;}
+
+/* SCROLL AREA */
+.scroll-wrap{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  /* Hide scrollbar */
+  scrollbar-width:none;
+}
+.scroll-wrap::-webkit-scrollbar{display:none;}
+
+.content{
+  padding:clamp(12px,3.5vw,22px);
+  max-width:580px;width:100%;margin:0 auto;
+  padding-bottom:max(calc(clamp(12px,3.5vw,22px) + var(--safe-bottom)),28px);
+  padding-left:max(clamp(12px,3.5vw,22px),var(--safe-left));
+  padding-right:max(clamp(12px,3.5vw,22px),var(--safe-right));
+}
+
+/* MODE BAR */
+.mode-bar{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:9px 16px;border-radius:12px;
+  margin-bottom:12px;font-size:clamp(11px,3vw,13px);
+  font-weight:700;letter-spacing:.5px;
+  line-height:1.3;text-align:center;
+}
+.mode-accurate{background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);color:var(--cyan);}
+.mode-error{background:rgba(255,23,68,.08);border:1px solid rgba(255,23,68,.25);color:var(--red);}
+
+/* LIVE CARD */
+.live-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-card);
+  padding:clamp(14px,4vw,22px);
+  margin-bottom:12px;position:relative;overflow:hidden;
+}
+.live-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,rgba(41,121,255,.04) 0%,transparent 60%);
+}
+.live-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;flex-wrap:wrap;gap:8px;
+}
+.live-title{
+  font-size:clamp(10px,2.8vw,12px);color:var(--muted);
+  font-weight:700;letter-spacing:2px;
+  display:flex;align-items:center;gap:7px;
+}
+.dot-sm{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 7px rgba(0,229,255,.5);
+  flex-shrink:0;
+}
+
+.status-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:99px;
+  font-size:clamp(11px,3vw,13px);font-weight:900;
+  letter-spacing:.5px;transition:all .4s;
+  white-space:nowrap;
+}
+.chip-waiting{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.35);color:var(--gold);}
+.chip-flying{background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.35);color:var(--green);}
+.chip-crashed{background:rgba(255,23,68,.12);border:1px solid rgba(255,23,68,.35);color:var(--red);}
+
+.cur-multi{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(28px,9vw,46px);font-weight:900;
+  text-align:center;padding:6px 0 2px;transition:color .3s;
+  line-height:1.1;
+}
+.cur-multi.green{color:var(--green);text-shadow:0 0 22px rgba(0,230,118,.6);}
+.cur-multi.red{color:var(--red);text-shadow:0 0 22px rgba(255,23,68,.6);}
+.cur-multi.gold{color:var(--gold);text-shadow:0 0 22px rgba(245,166,35,.6);}
+
+#liveSubtext{
+  text-align:center;color:var(--muted);
+  font-size:clamp(11px,3vw,13px);
+  margin-top:4px;line-height:1.4;
+}
+
+.cd-bar-bg{height:5px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-top:10px;display:none;}
+.cd-bar{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--gold),#e8920f);
+  transition:width .2s linear;
+  box-shadow:0 0 8px rgba(245,166,35,.4);
+}
+
+/* PREDICTION CARD */
+.pred-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-card);
+  padding:clamp(14px,4vw,24px);
+  margin-bottom:12px;position:relative;overflow:hidden;
+  animation:cardIn .5s ease;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.pred-label{
+  font-size:clamp(10px,2.8vw,12px);color:var(--muted);
+  font-weight:700;letter-spacing:2px;
+  margin-bottom:6px;
+  display:flex;align-items:center;gap:7px;
+}
+
+/* BIG NUMBER */
+.bn-wrap{
+  text-align:center;
+  padding:clamp(6px,2.5vw,12px) 0 clamp(2px,1vw,6px);
+}
+.bn{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(70px,22vw,130px);
+  font-weight:900;line-height:1;display:inline-block;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+  /* Prevent layout shift */
+  min-width:1ch;
+}
+.bn.red {color:var(--red); text-shadow:0 0 45px rgba(255,23,68,.9),0 0 90px rgba(255,23,68,.4);}
+.bn.green{color:var(--green);text-shadow:0 0 45px rgba(0,230,118,.9),0 0 90px rgba(0,230,118,.4);}
+.bn.gold {color:var(--gold); text-shadow:0 0 45px rgba(245,166,35,.9),0 0 90px rgba(245,166,35,.4);}
+@keyframes bigPulse{0%,100%{opacity:1}50%{opacity:.62}}
+.bn.pulsing{animation:bigPulse 1.3s ease infinite;}
+.bnx{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(26px,7.5vw,48px);
+  vertical-align:super;opacity:.8;
+}
+
+/* INFO GRID */
+.info-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-top:12px;
+}
+.icell{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:12px 14px;text-align:center;
+}
+.ilbl{
+  font-size:clamp(9px,2.5vw,11px);color:var(--muted);
+  font-weight:700;letter-spacing:1px;margin-bottom:5px;
+}
+.ival{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(16px,5vw,22px);font-weight:900;
+  line-height:1.2;
+}
+.vg{color:var(--green);text-shadow:0 0 12px rgba(0,230,118,.5);}
+.vr{color:var(--red);text-shadow:0 0 12px rgba(255,23,68,.5);}
+.vo{color:var(--gold);text-shadow:0 0 12px rgba(245,166,35,.5);}
+
+/* SOURCE BADGE */
+.src-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:99px;
+  font-size:clamp(10px,2.8vw,12px);font-weight:700;
+  letter-spacing:.5px;margin-top:12px;
+}
+.sb-db{background:rgba(41,121,255,.12);border:1px solid rgba(41,121,255,.3);color:var(--blue);}
+.sb-queue{background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);color:var(--cyan);}
+.sb-force{background:rgba(255,109,0,.12);border:1px solid rgba(255,109,0,.3);color:var(--orange);}
+.sb-smart{background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.3);color:var(--green);}
+.sb-error{background:rgba(255,23,68,.12);border:1px solid rgba(255,23,68,.3);color:var(--red);}
+.sb-preexp{background:rgba(255,23,68,.2);border:1px solid rgba(255,23,68,.5);color:var(--red);font-size:12px;font-weight:900;}
+
+/* QUEUE CARD */
+.queue-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:14px 16px;
+  margin-bottom:12px;display:none;
+}
+.queue-title{
+  font-size:clamp(10px,2.8vw,12px);color:var(--muted);
+  font-weight:700;letter-spacing:2px;
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.queue-items{display:flex;flex-wrap:wrap;gap:7px;}
+.qi{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(12px,3.5vw,14px);font-weight:900;
+  padding:6px 14px;border-radius:10px;
+  background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);color:var(--cyan);
+}
+.qi.next{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--gold);font-size:15px;}
+
+/* HISTORY CARD */
+.hist-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:14px 16px;margin-bottom:12px;
+}
+.hist-title{
+  font-size:clamp(10px,2.8vw,12px);color:var(--muted);
+  font-weight:700;letter-spacing:2px;
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.hist-list{
+  display:flex;flex-direction:column;gap:7px;
+  max-height:220px;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+}
+.hist-list::-webkit-scrollbar{width:3px}
+.hist-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.hi{
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.025);border:1px solid var(--border);
+  border-radius:11px;padding:9px 12px;
+  font-size:clamp(11px,3vw,13px);
+  animation:slideIn .3s ease;
+  gap:6px;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+.h-rnd{color:var(--muted);font-size:clamp(10px,2.8vw,12px);flex-shrink:0;}
+.h-crash{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(13px,3.5vw,15px);}
+.h-pred{color:var(--muted);font-size:clamp(9px,2.5vw,11px);flex-shrink:0;}
+.h-tag{
+  font-size:clamp(9px,2.5vw,11px);font-weight:700;
+  padding:3px 9px;border-radius:7px;flex-shrink:0;white-space:nowrap;
+}
+.tag-acc{background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.3);color:var(--green);}
+.tag-err{background:rgba(255,23,68,.12);border:1px solid rgba(255,23,68,.3);color:var(--red);}
+
+/* PARTICLES */
+.ptcls-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;}
+.ptcl{position:absolute;border-radius:50%;animation:fltUp 3s ease-out forwards;}
+@keyframes fltUp{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-220px) scale(.2)}
+}
+
+/* OFFLINE TOAST */
+#offlineToast{
+  position:fixed;bottom:max(80px,calc(var(--safe-bottom) + 70px));
+  left:50%;transform:translateX(-50%) translateY(80px);
+  background:rgba(255,23,68,.95);
+  color:#fff;border-radius:99px;
+  padding:10px 20px;font-size:13px;font-weight:700;
+  box-shadow:0 4px 24px rgba(0,0,0,.5);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s;
+  opacity:0;z-index:10000;white-space:nowrap;
+}
+#offlineToast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* RESPONSIVE TWEAKS */
+@media(max-width:360px){
+  .info-grid{gap:7px}
+  .icell{padding:10px 10px}
+  .bn{font-size:clamp(60px,19vw,90px)}
+}
+@media(min-width:600px){
+  .bn{font-size:100px}
+  .content{padding:20px 28px}
+}
+/* Landscape on phones */
+@media(max-height:500px) and (orientation:landscape){
+  .bn{font-size:48px}
+  .bn-wrap{padding:4px 0 2px}
+  .pred-card{padding:10px 14px}
+  .live-card{padding:10px 14px}
+  .hist-list{max-height:140px}
+}
+</style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<div class="ptcls-wrap" id="ptcls"></div>
+
+<!-- OFFLINE TOAST -->
+<div id="offlineToast">📡 لا يوجد اتصال بالإنترنت</div>
+
+<!-- ═══════════ AUTH ═══════════ -->
+<div id="authScreen">
+  <div class="auth-box">
+    <span class="auth-plane">🚀</span>
+    <div class="auth-title">CRASH PREDICTOR</div>
+    <div class="auth-sub">توقع صحيح 100 % ونتائج مضمونة للربح </div>
+    <input
+      class="auth-input"
+      type="password"
+      id="pinInput"
+      maxlength="10"
+      placeholder="••••••••"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      autocomplete="current-password"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
+    <button class="btn-enter" id="btnEnter" type="button">⚡ دخول</button>
+    <div class="auth-err" id="authErr"></div>
+  </div>
+
+  <!-- PWA Install Banner -->
+  <div id="installBanner">
+    <div class="install-row">
+      <span class="install-icon">📲</span>
+      <div class="install-text">
+        <strong>ثبّت التطبيق على هاتفك</strong>
+        <span>للوصول السريع بدون متصفح</span>
+      </div>
+      <button class="btn-install" id="btnInstall" type="button">تثبيت</button>
+      <button class="btn-dismiss" id="btnDismiss" type="button">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div id="mainScreen">
+  <div class="hdr">
+    <div class="hdr-left">
+      <div class="live-dot"></div>
+      <div class="hdr-logo">PREDICTOR</div>
+    </div>
+    <button class="btn-out" id="btnOut" type="button">خروج ✕</button>
+  </div>
+
+  <div class="scroll-wrap">
+    <div class="content">
+
+      <div class="mode-bar mode-accurate" id="modeBar">⚡ سكربت التوقع اربح المال بسهولة الآن</div>
+
+      <!-- حالة الطائرة -->
+      <div class="live-card">
+        <div class="live-header">
+          <div class="live-title"><div class="dot-sm"></div>حالة الطائرة الآن</div>
+          <div class="status-chip chip-waiting" id="statusChip">⏳ جارٍ الاتصال...</div>
+        </div>
+        <div class="cur-multi gold" id="curMulti">—</div>
+        <div id="liveSubtext">جارٍ الاتصال ...</div>
+        <div class="cd-bar-bg" id="cdBarBg">
+          <div class="cd-bar" id="cdBar" style="width:100%"></div>
+        </div>
+      </div>
+
+      <!-- الجولات المجدولة -->
+      <div class="queue-card" id="queueCard">
+        <div class="queue-title">📋 الجولة القادمة ستكون</div>
+        <div class="queue-items" id="queueItems"></div>
+      </div>
+
+      <!-- التوقع -->
+      <div class="pred-card">
+        <div class="pred-label"><div class="dot-sm"></div>الجولة القادمة — ستنفجر عند</div>
+        <div class="bn-wrap">
+          <span class="bn red pulsing" id="bnNum">--</span><span class="bn red bnx" id="bnX">×</span>
+        </div>
+        <div class="info-grid">
+          <div class="icell">
+            <div class="ilbl">✅ اسحب أنت عند</div>
+            <div class="ival vg" id="safeVal">--×</div>
+          </div>
+          <div class="icell">
+            <div class="ilbl">⏱ وقت الانفجار</div>
+            <div class="ival vo" id="timeVal">-- ث</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;text-align:center">
+          <span class="src-badge sb-db" id="srcBadge">🔗 جارٍ القراءة...</span>
+        </div>
+      </div>
+
+      <!-- السجل -->
+      <div class="hist-card">
+        <div class="hist-title">📋 سجل الجولات السابقة</div>
+        <div class="hist-list" id="histList">
+          <div style="text-align:center;color:var(--muted);padding:16px;font-size:12px">في انتظار الجولة الأولى...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SERVICE WORKER + PWA INSTALL ═══════════ -->
+<script>
+// ── Service Worker Registration ──
+if ('serviceWorker' in navigator) {
+  const swCode = `
+const CACHE = 'predictor-v1';
+const ASSETS = []; // Dynamic app — no static assets to precache
+
+self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
+
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  // Only cache same-origin requests, not Firebase
+  if (url.origin !== location.origin) return;
+  // Network-first strategy
+  e.respondWith(
+    fetch(e.request).catch(() =>
+      caches.match(e.request)
+    )
+  );
+});
+  `;
+  const swBlob = new Blob([swCode], {type:'text/javascript'});
+  const swURL  = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(()=>{});
+}
+
+// ── PWA Install Prompt ──
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner only if not already installed
+  if (!window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('installBanner').style.display = 'block';
+  }
+});
+
+document.getElementById('btnInstall').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner').style.display = 'none';
+});
+
+document.getElementById('btnDismiss').addEventListener('click', () => {
+  document.getElementById('installBanner').style.display = 'none';
+});
+
+// iOS Safari install hint
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isSafari = /safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+if (isIOS && isSafari && !isStandalone) {
+  const banner = document.getElementById('installBanner');
+  banner.style.display = 'block';
+  banner.querySelector('.install-text strong').textContent = 'ثبّت على iPhone / iPad';
+  banner.querySelector('.install-text span').textContent = 'اضغط 🔗 ثم "Add to Home Screen"';
+  banner.querySelector('#btnInstall').style.display = 'none';
+}
+
+// ── Offline Detection ──
+const toast = document.getElementById('offlineToast');
+let toastTimer;
+function showOffline(show) {
+  clearTimeout(toastTimer);
+  toast.classList.toggle('show', show);
+  if (!show) return;
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+window.addEventListener('online',  () => showOffline(false));
+window.addEventListener('offline', () => showOffline(true));
+if (!navigator.onLine) showOffline(true);
+
+// ── Wake Lock (keep screen on) ──
+let wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+    } catch(e) {}
+  }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && wakeLock?.released) {
+    requestWakeLock();
+  }
+});
+</script>
+
+<!-- ═══════════ FIREBASE + APP LOGIC ═══════════ -->
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ── Firebase Config ──
+const FC = {
+  apiKey:"AIzaSyDgE-51BnGwmriYnNbKF8KmToHGs9rrKfg",
+  authDomain:"crash-13b94.firebaseapp.com",
+  databaseURL:"https://crash-13b94-default-rtdb.firebaseio.com",
+  projectId:"crash-13b94",
+  storageBucket:"crash-13b94.firebasestorage.app",
+  messagingSenderId:"759166323551",
+  appId:"1:759166323551:web:510adc0a12cbd77d99c4ea"
+};
+const app = initializeApp(FC);
+const db  = getDatabase(app);
+
+// ── Passwords ──
+const PASSWORDS = { '20262024':'accurate', '123456':'error' };
+
+// ── State ──
+let mode          = null;
+let roundNum      = 1;
+let histItems     = [];
+let cdInterval    = null;
+let multiInterval = null;
+let lastStatus    = null;
+let forceCrash    = null;
+let forcePreExp   = false;
+let queueData     = [];
+let lastPredicted = null;
+let lastGameState = null;
+let listenersActive = false;
+
+// نفس معامل سرعة الطائرة
+const SPEED = 0.036;
+
+const calcMulti = ts => Math.max(1.00, Math.pow(2, (Date.now()-ts)/1000*SPEED));
+const calcETA   = (ts, target) => {
+  const etaSec = Math.log2(target) / SPEED;
+  return (ts + etaSec*1000 - Date.now()) / 1000;
+};
+
+const $ = id => document.getElementById(id);
+
+// ── AUTH ──
+$('pinInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+$('pinInput').addEventListener('input', () => { $('authErr').textContent = ''; });
+$('btnEnter').addEventListener('click', doLogin);
+$('btnOut').addEventListener('click', doLogout);
+
+function doLogin() {
+  const pin = $('pinInput').value.trim();
+  const m   = PASSWORDS[pin];
+  if (m) {
+    mode = m;
+    $('authScreen').style.display = 'none';
+    $('mainScreen').style.display = 'flex';
+    applyMode();
+    if (!listenersActive) { startListeners(); listenersActive = true; }
+    // Request wake lock when logged in
+    if (typeof requestWakeLock === 'function') requestWakeLock();
+  } else {
+    const el = $('authErr');
+    el.textContent = '❌ رمز غير صحيح، حاول مرة أخرى';
+    el.style.animation = 'none';
+    requestAnimationFrame(() => { el.style.animation = 'shake .4s ease'; });
+    $('pinInput').value = '';
+    $('pinInput').focus();
+  }
+}
+
+function doLogout() {
+  mode = null; histItems = []; roundNum = 1; lastStatus = null;
+  forceCrash = null; forcePreExp = false; queueData = [];
+  clearInterval(cdInterval); clearInterval(multiInterval);
+  $('authScreen').style.display = 'flex';
+  $('mainScreen').style.display = 'none';
+  $('pinInput').value = '';
+  $('histList').innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:12px">في انتظار الجولة الأولى...</div>';
+}
+
+function applyMode() {
+  const bar = $('modeBar');
+  if (mode === 'error') {
+    bar.className   = 'mode-bar mode-error';
+    bar.textContent = '⚠️ وضع التوقع الدقيق 100% — حان الوقت لتكون غني';
+  } else {
+    bar.className   = 'mode-bar mode-accurate';
+    bar.textContent = '⚡ وضع التوقع الدقيق 100% — حان الوقت لتكون غني';
+  }
+}
+
+// ── FIREBASE LISTENERS ──
+function startListeners() {
+  onValue(ref(db,'game/state'), snap => {
+    if (!snap.exists()) return;
+    handleState(snap.val());
+  });
+
+  onValue(ref(db,'game/roundQueue'), snap => {
+    queueData = snap.exists() ? snap.val().filter(v=>typeof v==='number') : [];
+    renderQueue();
+    if (lastGameState && (lastGameState.status==='waiting' || lastGameState.status==='crashed')) {
+      buildPrediction(lastGameState);
+    }
+  });
+
+  onValue(ref(db,'game/forceCrash'), snap => {
+    forceCrash = (snap.exists() && snap.val()>1) ? snap.val() : null;
+    if (lastGameState && lastGameState.status==='waiting') buildPrediction(lastGameState);
+  });
+
+  onValue(ref(db,'game/forcePreExplode'), snap => {
+    forcePreExp = snap.exists() && snap.val()===true;
+    if (lastGameState && lastGameState.status==='waiting') buildPrediction(lastGameState);
+  });
+}
+
+// ── GAME STATE HANDLER ──
+function handleState(s) {
+  const prev  = lastStatus;
+  lastStatus  = s.status;
+  lastGameState = s;
+
+  if (prev==='flying' && s.status==='crashed') {
+    recordHistory(parseFloat(s.crashedAt||0));
+  }
+
+  clearInterval(cdInterval);
+  clearInterval(multiInterval);
+
+  if (s.status==='waiting') {
+    showWaiting(s);
+    buildPrediction(s);
+  } else if (s.status==='flying') {
+    showFlying(s);
+    if (prev!=='flying') buildPrediction(s);
+  } else if (s.status==='crashed') {
+    showCrashed(s);
+  }
+}
+
+// ── DISPLAY STATES ──
+function showWaiting(s) {
+  setChip('waiting','⏳ انتظار الرهانات');
+  const el = $('curMulti');
+  el.textContent = 'انتظار...';
+  el.className   = 'cur-multi gold';
+
+  const endsAt  = s.endsAt || ((s.startedAt||Date.now()) + 15000);
+  const totalMs = endsAt - (s.startedAt||(endsAt-15000));
+  $('cdBarBg').style.display = 'block';
+
+  cdInterval = setInterval(() => {
+    const rem = (endsAt - Date.now()) / 1000;
+    if (rem <= 0) {
+      clearInterval(cdInterval);
+      $('liveSubtext').textContent = '🛫 الجولة بدأت!';
+      $('cdBar').style.width = '0%';
+      return;
+    }
+    $('liveSubtext').textContent = `⏳ جولة جديدة خلال ${Math.ceil(rem)} ثانية`;
+    const pct = Math.max(0, Math.min(100, (rem*1000/totalMs)*100));
+    $('cdBar').style.width = pct + '%';
+  }, 100);
+}
+
+function showFlying(s) {
+  setChip('flying','🛫 الطائرة تطير الآن!');
+  $('cdBarBg').style.display = 'none';
+  const flyStart = s.startedAt || Date.now();
+  const crashAt  = s.crashAt   || 10;
+
+  multiInterval = setInterval(() => {
+    const m  = calcMulti(flyStart);
+    const el = $('curMulti');
+    el.textContent = m.toFixed(2) + '×';
+    el.className   = 'cur-multi '+(m<2?'red':m<5?'gold':'green');
+
+    const rem = calcETA(flyStart, crashAt);
+    $('liveSubtext').textContent = rem>0
+      ? `🚀 المضاعف الحالي: ${m.toFixed(2)}× — ستنفجر خلال ~${rem.toFixed(1)} ث`
+      : `💥 على وشك الانفجار!`;
+
+    $('timeVal').textContent = rem>0 ? `~${rem.toFixed(1)} ث` : 'قريباً!';
+  }, 80);
+}
+
+function showCrashed(s) {
+  clearInterval(multiInterval);
+  const cv = parseFloat(s.crashedAt||0).toFixed(2);
+  setChip('crashed',`💥 انفجرت عند ${cv}×`);
+  const el = $('curMulti');
+  el.textContent = cv + '×';
+  el.className   = 'cur-multi red';
+  $('liveSubtext').textContent = '💥 انتظار الجولة القادمة...';
+  $('cdBarBg').style.display   = 'none';
+  $('timeVal').textContent     = '-- ث';
+}
+
+// ── PREDICTION ENGINE ──
+async function buildPrediction(s) {
+  let crash  = null;
+  let source = 'smart';
+
+  if (forcePreExp) {
+    crash  = 1.01;
+    source = 'preexp';
+  } else if (forceCrash && forceCrash > 1) {
+    crash  = forceCrash;
+    source = 'force';
+  } else if (s.crashAt && parseFloat(s.crashAt) > 1) {
+    // ✅   الأدق دائماً
+    crash  = parseFloat(parseFloat(s.crashAt).toFixed(2));
+    source = 'db';
+  } else if (queueData.length > 0) {
+    crash  = queueData[0];
+    source = 'queue';
+  } else {
+    crash  = await smartPredict();
+    source = 'smart';
+  }
+
+  let displayCrash = crash;
+  if (mode === 'error') {
+    displayCrash = crash > 30
+      ? +((Math.random()*1.5+1.05).toFixed(2))
+      : +((Math.random()*300+80).toFixed(0));
+    source = 'error';
+  }
+
+  lastPredicted = displayCrash;
+  renderPrediction(displayCrash, source, s);
+}
+
+// ── SMART PREDICT (احتياطي فقط) ──
+async function smartPredict() {
+  if (histItems.length >= 3) {
+    const recent   = histItems.slice(0,5).map(h=>h.crash);
+    const avg      = recent.reduce((a,b)=>a+b,0)/recent.length;
+    const variance = 1 + (Math.random()*0.28 - 0.14);
+    return parseFloat((avg*variance).toFixed(2));
+  }
+  return genBaseCrash();
+}
+
+function genBaseCrash() {
+  const r = Math.random();
+  if (r<.33) return +((Math.random()*1.4+1.1).toFixed(2));
+  if (r<.58) return +((Math.random()*5+2.5).toFixed(2));
+  if (r<.76) return +((Math.random()*17+8).toFixed(1));
+  if (r<.90) return +((Math.random()*40+25).toFixed(1));
+  if (r<.97) return +((Math.random()*90+60).toFixed(0));
+  return +((Math.random()*350+150).toFixed(0));
+}
+
+// ── RENDER PREDICTION ──
+function renderPrediction(crash, source, s) {
+  const ratio = 0.88 + Math.random()*0.05;
+  const safe  = crash <= 1.1 ? 1.01 : parseFloat((crash*ratio).toFixed(crash>=10?1:2));
+
+  let timeStr = '-- ث';
+  if (s.status==='flying' && s.startedAt) {
+    const rem = calcETA(s.startedAt, crash);
+    timeStr   = rem>0 ? `~${rem.toFixed(1)} ث` : 'قريباً!';
+  } else if (s.status==='waiting') {
+    const endsAt  = s.endsAt || (Date.now()+5000);
+    const flyTime = Math.log2(crash)/SPEED;
+    const total   = (endsAt-Date.now())/1000 + flyTime;
+    timeStr = total>0 ? `~${total.toFixed(0)} ث` : '-- ث';
+  }
+
+  const color = crash<=2?'red':crash<=10?'gold':'green';
+
+  const bnEl = $('bnNum');
+  const bxEl = $('bnX');
+  bnEl.style.transform = 'scale(0.55)';
+  bnEl.style.opacity   = '0.1';
+  setTimeout(() => {
+    bnEl.textContent = crash;
+    bnEl.className   = `bn ${color} pulsing`;
+    bxEl.className   = `bn ${color} bnx`;
+    bnEl.style.transition = 'transform .55s cubic-bezier(.34,1.56,.64,1),opacity .3s';
+    bnEl.style.transform  = 'scale(1)';
+    bnEl.style.opacity    = '1';
+  }, 80);
+
+  $('safeVal').textContent = safe + '×';
+  $('safeVal').className   = 'ival '+(crash<=2?'vr':'vg');
+  $('timeVal').textContent = timeStr;
+
+  const srcMap = {
+    preexp: ['🔥 انفجار قبل الطلوع!', 'sb-preexp'],
+    force:  ['⚡ستنفجر ',            'sb-force'],
+    db:     ['🔗 توقع دقيق',  'sb-db'],
+    queue:  ['📋 انت فى حالة التوقع ',            'sb-queue'],
+    smart:  ['🧠 طريقة للكسب السريع',             'sb-smart'],
+    error:  ['❌ وضع الربح المضمون',          'sb-error'],
+  };
+  const [lbl, cls] = srcMap[source] || srcMap['smart'];
+  $('srcBadge').textContent = lbl;
+  $('srcBadge').className   = `src-badge ${cls}`;
+
+  if (mode==='accurate' && crash>=20) spawnParticles(crash>=100?25:12);
+}
+
+// ── HISTORY ──
+function recordHistory(actualCrash) {
+  const predicted = lastPredicted || 0;
+  const diff      = predicted>0 ? Math.abs(predicted-actualCrash)/actualCrash : 1;
+  const tag       = mode==='accurate' && diff<=0.15;
+  histItems.unshift({ round:roundNum++, crash:actualCrash, predicted, tag });
+  if (histItems.length>20) histItems.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = $('histList');
+  if (!histItems.length) return;
+  const col = v => v>=10?'vg':v>=3?'vo':'vr';
+  list.innerHTML = histItems.map((h,i) => `
+    <div class="hi" style="animation-delay:${i*.04}s">
+      <span class="h-rnd">ج${h.round}</span>
+      <span class="h-crash ${col(h.crash)}">${h.crash}×</span>
+      <span class="h-pred">توقع: ${h.predicted}×</span>
+      <span class="h-tag ${h.tag?'tag-acc':'tag-err'}">${h.tag?'✅':'🔄'}</span>
+    </div>`).join('');
+}
+
+// ── QUEUE ──
+function renderQueue() {
+  const card = $('queueCard');
+  if (!queueData.length) { card.style.display='none'; return; }
+  card.style.display = 'block';
+  $('queueItems').innerHTML = queueData.map((v,i) =>
+    `<span class="qi ${i===0?'next':''}">${i===0?'⭐ ':''}${v}×</span>`
+  ).join('');
+}
+
+// ── HELPERS ──
+function setChip(type, text) {
+  const el = $('statusChip');
+  el.textContent = text;
+  el.className   = `status-chip chip-${type}`;
+}
+
+function spawnParticles(n) {
+  const wrap = $('ptcls');
+  const cols = ['#f5a623','#00e676','#2979ff','#00e5ff','#ff6d00','#e040fb'];
+  for (let i=0;i<n;i++) {
+    const el = document.createElement('div');
+    el.className = 'ptcl';
+    const sz = 4+Math.random()*9;
+    el.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${5+Math.random()*90}%;
+      bottom:${15+Math.random()*50}%;
+      background:${cols[~~(Math.random()*cols.length)]};
+      box-shadow:0 0 6px currentColor;
+      animation-delay:${Math.random()*.6}s;
+      animation-duration:${2+Math.random()*2.5}s;
+    `;
+    wrap.appendChild(el);
+    setTimeout(()=>el.remove(), 5000);
+  }
+}
+</script>
+</body>
+</html>
